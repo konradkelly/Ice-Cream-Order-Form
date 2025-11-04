@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Admin Dashboard</title>
+		<link
+			rel="stylesheet"
+			href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css"
+		/>
+
+		<script src="js/pizza.js" defer></script>
+		<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+		<script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+	</head>
+	<body>
+		<table id="order-table" class="display">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Toppings</th>
+					<th>Size</th>
+					<th>Comment</th>
+					<th>Date/Time</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% orders.forEach(order => { %>
+				<tr>
+					<td><%= order.fname %><%= order.lname %></td>
+					<td><%= order.email %></td>
+					<td><%= order.toppings %></td>
+					<td><%= order.size %></td>
+					<td><%= order.comment %></td>
+					<td><%= new Date(order.timestamp).toLocaleString() %></td>
+				</tr>
+				<% }); %>
+			</tbody>
+		</table>
+		<script defer>
+			let table = new DataTable("#order-table");
+		</script>
+	</body>
+</html>
