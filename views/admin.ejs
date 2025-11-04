@@ -6,12 +6,12 @@
 		<title>Admin Dashboard</title>
 		<link
 			rel="stylesheet"
-			href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css"
+			href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css"
 		/>
 
 		<script src="js/pizza.js" defer></script>
-		<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-		<script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+		<script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 	</head>
 	<body>
 		<table id="order-table" class="display">
@@ -28,7 +28,7 @@
 			<tbody>
 				<% orders.forEach(order => { %>
 				<tr>
-					<td><%= order.fname %><%= order.lname %></td>
+					<td><%= order.name %></td>
 					<td><%= order.email %></td>
 					<td><%= order.toppings %></td>
 					<td><%= order.size %></td>

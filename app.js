@@ -20,7 +20,7 @@ app.post("/submit-order", (req, res) => {
 		name: req.body.name,
 		email: req.body.email,
 		flavor: req.body.flavor,
-		cone: req.body.cone,
+		size: req.body.cone,
 		toppings: [].concat(req.body.toppings || []), //prevents type error when a String is passed in instead of an Array
 		comment: req.body.comment,
 		timestamp: new Date(),
