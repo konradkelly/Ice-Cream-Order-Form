@@ -1,6 +1,18 @@
 import express from "express";
+import mysql2 from 'mysql2';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
+
+const pool = mysql2.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
+}).promise();
 
 app.set("view engine", "ejs");
 
@@ -10,6 +22,16 @@ app.use(express.urlencoded({ extended: true }));
 const orders = [];
 
 const PORT = 3002;
+
+// Define a route to test database connection 
+app.get('/db-test', async (req, res) => {
+    try {
+        const [orders] = await pool.query('SELECT * FROM ORDERS');
+        res.send(orders);
+    } catch (err) {
+        console.error('Database error:', err);
+    }
+});
 
 app.get("/", (req, res) => {
 	res.render("home");
@@ -30,9 +52,18 @@ app.post("/submit-order", (req, res) => {
 	res.render("confirmation", { order });
 });
 
-app.get("/admin", (req, res) => {
-	res.render("admin", { orders });
+
+app.get('/admin', async (req, res) => {
+
+    try {
+        const [orders] = await pool.query('SELECT * FROM ORDERS ORDER BY timestamp DESC');
+        res.render('admin', { orders });
+    } catch (err) {
+        console.error('Database error:', err);
+		res.status(500).send('Error loading orders: ' + err.message);
+    }
 });
+
 
 app.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);
