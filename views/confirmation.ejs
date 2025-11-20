@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Your Order is Confirmed!</title>
-		<link rel="stylesheet" href="styles/ice-cream.css" />
-		<link rel="icon" type="image/png" href="images/favicon-16x16.png" />
-	</head>
-	<body>
-		<main>
-			<div class="confirmation-card">
-				<div class="checkmark-circle">✓</div>
-				<h1>Thank You for Your Order!</h1>
-				<p style="color: #777; font-size: 0.9em; margin-bottom: 30px">
-					Your ice cream order has been confirmed
-				</p>
 
-				<% if (order) { %>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Your Order is Confirmed!</title>
+	<link rel="stylesheet" href="styles/ice-cream.css" />
+	<link rel="icon" type="image/png" href="images/favicon-16x16.png" />
+</head>
+
+<body>
+	<main>
+		<div class="confirmation-card">
+			<div class="checkmark-circle">✓</div>
+			<h1>Thank You for Your Order!</h1>
+			<p style="color: #777; font-size: 0.9em; margin-bottom: 30px">
+				Your ice cream order has been confirmed
+			</p>
+
+			<% if (order) { %>
 
 				<!-- Personal Information Section -->
 				<div class="section-header">Personal Information</div>
 				<div class="order-section">
 					<div class="order-row">
 						<span class="order-label">Name:</span>
-						<span class="order-value"><%= order.name %></span>
+						<span class="order-value">
+							<%= order.name %>
+						</span>
 					</div>
 					<div class="order-row">
 						<span class="order-label">Email:</span>
-						<span class="order-value"><%= order.email %></span>
+						<span class="order-value">
+							<%= order.email %>
+						</span>
 					</div>
 				</div>
 
@@ -36,19 +42,26 @@
 				<div class="order-section">
 					<div class="order-row">
 						<span class="order-label">Flavor:</span>
-						<span class="order-value"><%= order.flavor %></span>
+						<span class="order-value">
+							<%= order.flavor %>
+						</span>
 					</div>
 					<div class="order-row">
 						<span class="order-label">Cone Type:</span>
-						<span class="order-value"><%= order.cone %></span>
+						<span class="order-value">
+							<%= order.cone %>
+						</span>
 					</div>
 					<div class="order-row">
 						<span class="order-label">Toppings:</span>
 						<span class="order-value">
-							<% if (order.toppings && order.toppings.length) { %> <%
-							order.toppings.forEach(topping => { %>
-							<span class="topping-pill"><%= topping %></span>
-							<% }); %> <% } else { %> None <% } %>
+							<% if (order.toppings && order.toppings.length) { %>
+								<% order.toppings.split(", ").forEach(topping => { %> 
+									<span class=" topping-pill"><%= topping %></span>
+						<% }); %>
+						<% } else { %>
+							None
+							<% } %>
 						</span>
 					</div>
 				</div>
@@ -66,15 +79,15 @@
 				</div>
 
 				<% } else { %>
-				<p style="color: #d32f2f; margin: 20px 0">
-					No order found. Please submit an order first.
-				</p>
-				<a href="/" class="button place-another">Back to Home</a>
-				<% } %>
-			</div>
-		</main>
-	</body>
-	<footer class="admin-link">
-		<a href="/admin">Admin Route</a>
-	</footer>
+					<p style="color: #d32f2f; margin: 20px 0">
+						No order found. Please submit an order first.
+					</p>
+					<a href="/" class="button place-another">Back to Home</a>
+					<% } %>
+		</div>
+	</main>
+</body>
+<footer class="admin-link">
+	<a href="/admin">Admin Route</a>
+</footer>
 </html>
