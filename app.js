@@ -39,10 +39,10 @@ app.get("/", (req, res) => {
 
 app.post("/submit-order", (req, res) => {
 	const order = {
-		name: req.body.name,
+		customer: req.body.name,
 		email: req.body.email,
 		flavor: req.body.flavor,
-		size: req.body.cone,
+		cone: req.body.cone,
 		toppings: [].concat(req.body.toppings || []), //prevents type error when a String is passed in instead of an Array
 		comment: req.body.comment,
 		timestamp: new Date(),
@@ -64,7 +64,25 @@ app.get('/admin', async (req, res) => {
     }
 });
 
-
+app.post('/confirm', async (req, res) => {
+	try {
+		const order = req.body;
+		console.log('New order submitted:', order);
+		order.toppings = Array.isArray(order.toppings) ? order.toppings.join(", ") : "";
+		
+		const sql =
+		`INSERT INTO ORDERS(customer, email, flavor, cone, toppings)
+		VALUES (?, ?, ?, ?, ?);`;
+		
+		const params = [ order.customer, order.email, order.flavor, order.cone, order.toppings];
+		const [result] = await pool.execute(sql, params);
+		console.log('Order saved with ID:', result.insertId);
+		res.render('confirmation', { order });
+		} catch (err) {
+		console.error('Error saving order:', err);
+		res.status(500).send('Sorry, there was an error processing your order. Please try again.');
+	}
+});
 app.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);
 });
