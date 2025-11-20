@@ -7,11 +7,11 @@ dotenv.config();
 const app = express();
 
 const pool = mysql2.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME,
+	port: process.env.DB_PORT
 }).promise();
 
 app.set("view engine", "ejs");
@@ -25,18 +25,19 @@ const PORT = 3002;
 
 // Define a route to test database connection 
 app.get('/db-test', async (req, res) => {
-    try {
-        const [orders] = await pool.query('SELECT * FROM ORDERS');
-        res.send(orders);
-    } catch (err) {
-        console.error('Database error:', err);
-    }
+	try {
+		const [orders] = await pool.query('SELECT * FROM ORDERS');
+		res.send(orders);
+	} catch (err) {
+		console.error('Database error:', err);
+	}
 });
 
 app.get("/", (req, res) => {
 	res.render("home");
 });
 
+<<<<<<< HEAD
 app.post("/submit-order", (req, res) => {
 	const order = {
 		customer: req.body.name,
@@ -50,20 +51,23 @@ app.post("/submit-order", (req, res) => {
 	orders.push(order);
 	console.log(orders);
 	res.render("confirmation", { order });
+=======
+app.get('/confirm', (req, res) => {
+	res.render('confirmation');
+>>>>>>> refs/remotes/origin/main
 });
-
 
 app.get('/admin', async (req, res) => {
-
-    try {
-        const [orders] = await pool.query('SELECT * FROM ORDERS ORDER BY timestamp DESC');
-        res.render('admin', { orders });
-    } catch (err) {
-        console.error('Database error:', err);
+	try {
+		const [orders] = await pool.query('SELECT * FROM ORDERS ORDER BY timestamp DESC');
+		res.render('admin', { orders });
+	} catch (err) {
+		console.error('Database error:', err);
 		res.status(500).send('Error loading orders: ' + err.message);
-    }
+	}
 });
 
+<<<<<<< HEAD
 app.post('/confirm', async (req, res) => {
 	try {
 		const order = req.body;
@@ -83,6 +87,60 @@ app.post('/confirm', async (req, res) => {
 		res.status(500).send('Sorry, there was an error processing your order. Please try again.');
 	}
 });
+=======
+app.post("/submit-order", async (req, res) => {
+
+	const order = {
+		customer: req.body.name,
+		email: req.body.email,
+		flavor: req.body.flavor,
+		cone: req.body.cone,
+		toppings: req.body.toppings,
+		timestamp: new Date()
+	};
+
+	// orders.push(order);
+	// console.log(orders);
+
+	if (Array.isArray(order.toppings)) {
+		order.toppings = order.toppings.join(", ");
+	} else if (typeof order.toppings === "string") {
+		try {
+			const parsed = JSON.parse(order.toppings);
+			if (Array.isArray(parsed)) {
+				order.toppings = parsed.join(", ");
+			}
+		} catch {
+			// not JSON, leave it alone
+		}
+	}
+
+	// Write a query to insert oder into DB
+	const sql = "INSERT INTO ORDERS (customer, email, flavor, cone, toppings, timestamp) VALUES (?, ?, ?, ?, ?, ?)";
+
+	// Create array of parameters for each placeholder
+	const params = [
+		order.customer,
+		order.email,
+		order.flavor,
+		order.cone,
+		order.toppings,
+		order.timestamp
+	];
+
+	try {
+		const [result] = await pool.execute(sql, params);
+
+		// Send user to confirmation page
+		res.render('confirmation', { order });
+
+	} catch (err) {
+		console.error("Database Error:", err);
+		res.status(500).send('Error loading orders: ' + err.message);
+	}
+});
+
+>>>>>>> refs/remotes/origin/main
 app.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);
 });
